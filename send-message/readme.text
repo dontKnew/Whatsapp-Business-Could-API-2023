@@ -1,0 +1,233 @@
+=> use whatsapp business online, but u can not use it on whatsapp account or business account
+    https://business.facebook.com/wa/manage/message-templates/?business_id=155120210548256&waba_id=100557969535031
+=> message template for all type of images
+    https://developers.facebook.com/docs/whatsapp/cloud-api/guides/send-message-templates
+    or
+    https://support.qiscus.com/hc/en-us/articles/4419458321817-Send-WhatsApp-Business-API-with-Different-Types-of-Template
+
+=> RAPIDEX info for wp :
+    -> Token
+        
+    -> Message Template
+        *Hello {{1}}*,
+        Your shipment has been picked up by Rapidex, It will be delivery soon and we will update you through Whatsapp messages 🙃.
+        https://rapidexworldwide.com/tracking-status.php // question might be not accepting..
+     
+->  server :  https://graph.facebook.com/v15.0/100995949490042/messages
+     -> https://developers.facebook.com/docs/whatsapp/business-management-api/message-templates/
+
+
+{ "messaging_product": "whatsapp", "to": "916205881326", "type": "template", "template": { "name": "hello_world", "language": { "code": "en_US" } } }
+
+=> If u enter invlaid number or does not exist whatsapp number then its given error :
+    {"error":{"message":"(#131009) Parameter value is not valid","type":"OAuthException","code":131009,"error_data":{"messaging_product":"whatsapp","details":"Parameter Invalid"},"error_subcode":2494010,"fbtrace_id":"ATWF0yAEtxE1PDHnMHtnmv7"}}
+
+PHP
+$data = [
+    "messaging_product" => "whatsapp",
+    "to" => 916205881326,
+    "type" => "template",
+        "name" => "rapidex_tracking ",
+    "template" => [
+        "language" => [
+            "code" => "en_UK"
+        ],
+        "component" => [
+            ["type" => "header",
+                "parameters" => [
+                    "type" => "image",
+                    "image" => [
+                        "link" => "https://rapidexworldwide.com/assets/img/logo.png"
+                    ]
+                ]
+            ],
+
+            ["type" => "body",
+                "parameters" => [
+                    "type" => "text",
+                    "text" => "Rahul Singh"
+             ]],
+
+            ["type" => "button",
+                "sub_type" => "call_to_action",
+                "index" => "0",
+                "parameters" => [
+                    "type" => "url",
+                    "url" => "?id=123456789"
+                ]],
+        ]
+    ]
+];
+
+=> Tex Based Message Template :
+    curl -X  POST
+     'https://graph.facebook.com/v15.0/FROM_PHONE_NUMBER_ID/messages'
+     -H 'Authorization: Bearer ACCESS_TOKEN'
+     -H 'Content-Type: application/json'
+     -d '{
+      "messaging_product": "whatsapp",
+      "recipient_type": "individual",
+      "to": "PHONE_NUMBER",
+      "type": "template",
+      "template": {
+        "name": "TEMPLATE_NAME",
+        "language": {
+          "code": "LANGUAGE_AND_LOCALE_CODE"
+        },
+        "components": [
+          {
+            "type": "body",
+            "parameters": [
+              {
+                "type": "text",
+                "text": "text-string"
+              },
+              {
+                "type": "currency",
+                "currency": {
+                  "fallback_value": "VALUE",
+                  "code": "USD",
+                  "amount_1000": NUMBER
+                }
+              },
+              {
+                "type": "date_time",
+                "date_time": {
+                  "fallback_value": "DATE"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }'
+
+=> Media Based Template like  video, image, pdf
+    curl -X  POST
+     'https://graph.facebook.com/v15.0/FROM_PHONE_NUMBER_ID/messages'
+     -H 'Authorization: Bearer ACCESS_TOKEN'
+     -H 'Content-Type: application/json'
+     -d '{
+      "messaging_product": "whatsapp",
+      "recipient_type": "individual",
+      "to": "PHONE_NUMBER",
+      "type": "template",
+      "template": {
+        "name": "TEMPLATE_NAME",
+        "language": {
+          "code": "LANGUAGE_AND_LOCALE_CODE"
+        },
+        "components": [
+          {
+            "type": "header",
+            "parameters": [
+              {
+                "type": "image",
+                "image": {
+                  "link": "https://URL"
+                }
+              }
+            ]
+          },
+          {
+            "type": "body",
+            "parameters": [
+              {
+                "type": "text",
+                "text": "TEXT-STRING"
+              },
+              {
+                "type": "currency",
+                "currency": {
+                  "fallback_value": "VALUE",
+                  "code": "USD",
+                  "amount_1000": NUMBER
+                }
+              },
+              {
+                "type": "date_time",
+                "date_time": {
+                  "fallback_value": "MONTH DAY, YEAR"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }'
+
+=> Interactive Based Template : Quick reply or call to action
+    curl -X  POST
+     'https://graph.facebook.com/v15.0/FROM_PHONE_NUMBER_ID/messages'
+     -H 'Authorization: Bearer ACCESS_TOKEN'
+     -H 'Content-Type: application/json'
+     -d '{
+      "messaging_product": "whatsapp",
+      "recipient_type": "individual",
+      "to": "PHONE_NUMBER",
+      "type": "template",
+      "template": {
+        "name": "TEMPLATE_NAME",
+        "language": {
+          "code": "LANGUAGE_AND_LOCALE_CODE"
+        },
+        "components": [
+          {
+            "type": "header",
+            "parameters": [
+              {
+                "type": "image",
+                "image": {
+                  "link": "http(s)://URL"
+                }
+              }
+            ]
+          },
+          {
+            "type": "body",
+            "parameters": [
+              {
+                "type": "text",
+                "text": "TEXT_STRING"
+              },
+              {
+                "type": "currency",
+                "currency": {
+                  "fallback_value": "VALUE",
+                  "code": "USD",
+                  "amount_1000": NUMBER
+                }
+              },
+              {
+                "type": "date_time",
+                "date_time": {
+                  "fallback_value": "MONTH DAY, YEAR"
+                }
+              }
+            ]
+          },
+          {
+            "type": "button",
+            "sub_type": "quick_reply",
+            "index": "0",
+            "parameters": [
+              {
+                "type": "payload",
+                "payload": "PAYLOAD"
+              }
+            ]
+          },
+          {
+            "type": "button",
+            "sub_type": "quick_reply",
+            "index": "1",
+            "parameters": [
+              {
+                "type": "payload",
+                "payload": "PAYLOAD"
+              }
+            ]
+          }
+        ]
+      }
+    }'
