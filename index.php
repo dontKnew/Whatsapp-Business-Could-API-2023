@@ -20,7 +20,7 @@ $whatsapp_cloud_api = new WhatsAppCloudApi([
 
 try {
 
-    //$whatsapp_cloud_api->sendTemplate('916205881326', 'hello_world', 'en_US');
+    $whatsapp_cloud_api->sendTemplate('916205881326', 'hello_world', 'en_US');
    // $whatsapp_cloud_api->sendTextMessage('916205881326', 'hello its workinng ?');
 
     /*$document_link = 'https://i.ytimg.com/vi/0jIQK3GvmDk/hqdefault.jpg';
